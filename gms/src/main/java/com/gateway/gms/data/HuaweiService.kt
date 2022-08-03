@@ -1,7 +1,7 @@
 package com.gateway.gms.data
 
-import com.gateway.gms.domain.CloudMessaging
-import com.gateway.gms.domain.MessagingTask
+import com.gateway.gms.domain.interfaces.CloudMessaging
+import com.gateway.gms.domain.models.MessagingTask
 import com.huawei.hms.push.HmsMessaging
 
 class HuaweiService(private val messaging: HmsMessaging) : CloudMessaging {

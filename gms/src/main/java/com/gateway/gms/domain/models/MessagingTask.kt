@@ -1,4 +1,4 @@
-package com.gateway.gms.domain
+package com.gateway.gms.domain.models
 
 import com.google.android.gms.tasks.Task as GoogleTask
 import com.huawei.hmf.tasks.Task as HuaweiTask
