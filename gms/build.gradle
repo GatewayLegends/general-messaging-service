@@ -54,6 +54,9 @@ dependencies {
     implementation 'com.google.firebase:firebase-crashlytics-ktx'
     implementation 'com.google.firebase:firebase-analytics-ktx'
 
+    implementation "com.google.firebase:firebase-messaging"
+    implementation "com.google.firebase:firebase-messaging-ktx"
+
     implementation 'com.huawei.agconnect:agconnect-core:1.5.2.300'
     implementation 'com.huawei.hms:hianalytics:5.3.1.300'
     implementation 'com.huawei.hms:dtm-api:5.3.0.300'

@@ -64,3 +64,4 @@ fabric.properties
 
 .idea/misc.xml
 *.ipr
+/gms/google-services.json
