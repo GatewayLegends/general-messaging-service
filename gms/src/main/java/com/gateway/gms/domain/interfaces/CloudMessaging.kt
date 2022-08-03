@@ -1,5 +1,8 @@
-package com.gateway.gms.domain
+package com.gateway.gms.domain.interfaces
 
+import com.gateway.gms.domain.models.MessagingTask
+import com.gateway.gms.domain.models.Resource
+import com.gateway.gms.domain.models.ServiceFailure
 import timber.log.Timber
 import com.google.android.gms.tasks.Tasks as GoogleTasks
 import com.huawei.hmf.tasks.Tasks as HuaweiTasks
@@ -21,6 +24,6 @@ interface CloudMessaging {
             Resource.Success(data = result)
         } catch (e: Exception) {
             Timber.e(e)
-            Resource.Fail(data = e.message)
+            Resource.Fail(error = ServiceFailure.UnknownError(message = e.message))
         }
 }
