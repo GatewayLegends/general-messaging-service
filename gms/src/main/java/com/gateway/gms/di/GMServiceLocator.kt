@@ -2,7 +2,6 @@ package com.gateway.gms.di
 
 import android.app.Application
 import com.gateway.gms.data.*
-import com.gateway.gms.domain.interfaces.CloudMessaging
 import com.gateway.gms.domain.models.Services
 import com.gateway.gms.domain.interfaces.CloudMessagingRepository
 import com.google.android.gms.common.ConnectionResult
@@ -12,11 +11,11 @@ import com.huawei.hms.api.HuaweiApiAvailability
 import com.huawei.hms.push.HmsMessaging
 import timber.log.Timber
 
-object ServiceLocator {
+object GMServiceLocator {
     @Volatile
     private lateinit var application: Application
-    private val googleService: CloudMessaging by lazy { provideGoogleMessagingService() }
-    private val huaweiService: CloudMessaging by lazy { provideHuaweiMessagingService() }
+    val googleService: FirebaseMessaging by lazy { FirebaseMessaging.getInstance() }
+    val huaweiService: HmsMessaging by lazy { HmsMessaging.getInstance(application) }
     private val googleApiAvailability: GoogleApiAvailability by lazy { provideGoogleApiAvailability() }
     private val huaweiApiAvailability: HuaweiApiAvailability by lazy { provideHuaweiApiAvailability() }
     val cloudMessagingRepository: CloudMessagingRepository by lazy { provideCloudMessagingRepository() }
@@ -39,22 +38,16 @@ object ServiceLocator {
 
     private fun provideHuaweiApiAvailability() = HuaweiApiAvailability.getInstance()
 
-    private fun provideGoogleMessagingService() =
-        GoogleService(messaging = FirebaseMessaging.getInstance())
-
-    private fun provideHuaweiMessagingService() =
-        HuaweiService(messaging = HmsMessaging.getInstance(application))
-
     private fun provideCloudMessagingRepository() : CloudMessagingRepository = CloudMessagingRepositoryImpl(
         service = when (ServiceAvailability.serviceProvider) {
-            is Services.Google -> googleService
-            is Services.Huawei -> huaweiService
+            is Services.Google -> GoogleService()
+            is Services.Huawei -> HuaweiService()
             else -> NoneService()
         }
     )
 
     private fun prepareAvailability() {
-        ServiceAvailability.isServicesAvailable = with(ServiceLocator) {
+        ServiceAvailability.isServicesAvailable = with(GMServiceLocator) {
             when (ConnectionResult.SUCCESS) {
                 googleApiAvailability.isGooglePlayServicesAvailable(application) -> setServiceProvider(
                     service = Services.Google
