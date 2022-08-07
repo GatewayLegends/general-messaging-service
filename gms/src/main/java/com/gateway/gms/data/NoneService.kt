@@ -1,11 +1,12 @@
 package com.gateway.gms.data
 
 import com.gateway.gms.domain.models.Resource
-import com.gateway.gms.domain.interfaces.CloudMessaging
+import com.gateway.gms.domain.interfaces.CloudMessagingService
+import com.gateway.gms.domain.interfaces.CloudMessagingServiceListener
 import com.gateway.gms.domain.models.ServiceFailure
 
 
-class NoneService : CloudMessaging {
+class NoneService : CloudMessagingService {
     override fun subscribeToTopic(topic: String): Resource<Void> =
         Resource.Fail(error = ServiceFailure.ServiceNotDetected())
 
@@ -17,4 +18,6 @@ class NoneService : CloudMessaging {
 
     override fun deleteToken(): Resource<Void> =
         Resource.Fail(error = ServiceFailure.ServiceNotDetected())
+
+    override var listener: CloudMessagingServiceListener? = null
 }
