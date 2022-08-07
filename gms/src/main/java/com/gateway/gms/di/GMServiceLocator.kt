@@ -1,9 +1,12 @@
 package com.gateway.gms.di
 
 import android.app.Application
+import android.content.Context
+import android.content.SharedPreferences
 import com.gateway.gms.data.*
-import com.gateway.gms.domain.models.Services
 import com.gateway.gms.domain.interfaces.CloudMessagingRepository
+import com.gateway.gms.domain.models.Services
+import com.gateway.gms.utils.Constants
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.firebase.messaging.FirebaseMessaging
@@ -19,6 +22,7 @@ object GMServiceLocator {
     private val googleApiAvailability: GoogleApiAvailability by lazy { provideGoogleApiAvailability() }
     private val huaweiApiAvailability: HuaweiApiAvailability by lazy { provideHuaweiApiAvailability() }
     val cloudMessagingRepository: CloudMessagingRepository by lazy { provideCloudMessagingRepository() }
+    val sharedPref: SharedPreferences by lazy { provideSharedPref() }
 
     /**
      * This function should called in MainActivity
@@ -34,17 +38,21 @@ object GMServiceLocator {
         }
     }
 
+    private fun provideSharedPref() =
+        application.getSharedPreferences(Constants.SharedPref.FILE_KEY, Context.MODE_PRIVATE)
+
     private fun provideGoogleApiAvailability() = GoogleApiAvailability.getInstance()
 
     private fun provideHuaweiApiAvailability() = HuaweiApiAvailability.getInstance()
 
-    private fun provideCloudMessagingRepository() : CloudMessagingRepository = CloudMessagingRepositoryImpl(
-        service = when (ServiceAvailability.serviceProvider) {
-            is Services.Google -> GoogleService()
-            is Services.Huawei -> HuaweiService()
-            else -> NoneService()
-        }
-    )
+    private fun provideCloudMessagingRepository(): CloudMessagingRepository =
+        CloudMessagingRepositoryImpl(
+            service = when (ServiceAvailability.serviceProvider) {
+                is Services.Google -> GoogleService()
+                is Services.Huawei -> HuaweiService()
+                else -> NoneService()
+            }
+        )
 
     private fun prepareAvailability() {
         ServiceAvailability.isServicesAvailable = with(GMServiceLocator) {

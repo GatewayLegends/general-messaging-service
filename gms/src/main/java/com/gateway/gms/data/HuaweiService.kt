@@ -3,6 +3,7 @@ package com.gateway.gms.data
 import com.gateway.gms.di.GMServiceLocator
 import com.gateway.gms.domain.interfaces.CloudMessaging
 import com.gateway.gms.domain.models.MessagingTask
+import com.gateway.gms.utils.Constants
 import com.huawei.hms.push.HmsMessageService
 import com.huawei.hms.push.HmsMessaging
 import com.huawei.hms.push.RemoteMessage
@@ -26,5 +27,8 @@ open class HuaweiService : CloudMessaging, HmsMessageService() {
 
     override fun onNewToken(p0: String?) {
         super.onNewToken(p0)
+        with(GMServiceLocator.sharedPref.edit()){
+            putString(Constants.SharedPref.TOKEN, p0)
+        }
     }
 }
