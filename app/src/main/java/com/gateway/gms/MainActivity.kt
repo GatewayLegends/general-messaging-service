@@ -12,13 +12,13 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        CoroutineScope(Dispatchers.IO).launch{
-            with(GMServiceLocator.cloudMessagingRepository) {
-                this.subscribeToTopic("Technology").collect {
-
-                    Timber.d(it.toString().substringAfter('$'))
-                }
-            }
-        }
+//        CoroutineScope(Dispatchers.IO).launch{
+//            with(GMServiceLocator.cloudMessagingRepository) {
+//                this.getToken().collect {
+//                    Timber.d(it.toString().substringAfter('$'))
+//                }
+//            }
+//        }
+        Timber.d(GMServiceLocator.token)
     }
 }
