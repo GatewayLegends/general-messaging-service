@@ -7,11 +7,13 @@ import timber.log.Timber
 import com.google.android.gms.tasks.Tasks as GoogleTasks
 import com.huawei.hmf.tasks.Tasks as HuaweiTasks
 
-interface CloudMessaging {
+interface CloudMessagingService {
     fun subscribeToTopic(topic: String): Resource<Void>
     fun unsubscribeFromTopic(topic: String): Resource<Void>
     fun getToken(): Resource<String>
     fun deleteToken(): Resource<Void>
+
+    val listener: CloudMessagingServiceListener?
 
     fun <T> safeTaskCall(block: () -> MessagingTask<T>) = catchTaskError(block())
 

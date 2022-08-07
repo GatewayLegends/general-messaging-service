@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import com.gateway.gms.data.*
 import com.gateway.gms.domain.interfaces.CloudMessagingRepository
+import com.gateway.gms.domain.interfaces.CloudMessagingServiceListener
 import com.gateway.gms.domain.models.Services
 import com.gateway.gms.utils.Constants
 import com.google.android.gms.common.ConnectionResult
@@ -24,6 +25,7 @@ object GMServiceLocator {
     val cloudMessagingRepository: CloudMessagingRepository by lazy { provideCloudMessagingRepository() }
     val sharedPref: SharedPreferences by lazy { provideSharedPref() }
     val token get() = sharedPref.getString(Constants.SharedPref.TOKEN, null)
+    var listener: CloudMessagingServiceListener? = null
 
     /**
      * This function should called in MainActivity
