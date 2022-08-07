@@ -23,6 +23,7 @@ object GMServiceLocator {
     private val huaweiApiAvailability: HuaweiApiAvailability by lazy { provideHuaweiApiAvailability() }
     val cloudMessagingRepository: CloudMessagingRepository by lazy { provideCloudMessagingRepository() }
     val sharedPref: SharedPreferences by lazy { provideSharedPref() }
+    val token get() = sharedPref.getString(Constants.SharedPref.TOKEN, null)
 
     /**
      * This function should called in MainActivity
