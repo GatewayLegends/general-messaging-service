@@ -3,6 +3,9 @@ package com.gateway.gms.data
 import com.gateway.gms.di.GMServiceLocator
 import com.gateway.gms.domain.interfaces.CloudMessaging
 import com.gateway.gms.domain.models.MessagingTask
+import com.gateway.gms.domain.models.Resource
+import com.gateway.gms.domain.models.ServiceFailure
+import com.gateway.gms.utils.Constants
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
@@ -17,7 +20,12 @@ open class GoogleService : CloudMessaging, FirebaseMessagingService() {
     override fun unsubscribeFromTopic(topic: String) =
         safeTaskCall { MessagingTask.Google(messaging.unsubscribeFromTopic(topic)) }
 
-    override fun getToken() = safeTaskCall { MessagingTask.Google(messaging.token) }
+    override fun getToken(): Resource<String> {
+        GMServiceLocator.token?.let {
+            return@getToken Resource.Success(data = it)
+        }
+        return Resource.Fail(error = ServiceFailure.NoTokenError())
+    }
 
     override fun deleteToken() = safeTaskCall { MessagingTask.Google(messaging.deleteToken()) }
 
@@ -29,6 +37,8 @@ open class GoogleService : CloudMessaging, FirebaseMessagingService() {
     override fun onNewToken(token: String) {
         super.onNewToken(token)
         Timber.d(token)
-
+        with(GMServiceLocator.sharedPref.edit()){
+            putString(Constants.SharedPref.TOKEN, token)
+        }
     }
 }
