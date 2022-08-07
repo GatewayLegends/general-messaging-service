@@ -1,7 +1,8 @@
 package com.gateway.gms.data
 
 import com.gateway.gms.di.GMServiceLocator
-import com.gateway.gms.domain.interfaces.CloudMessaging
+import com.gateway.gms.domain.interfaces.CloudMessagingService
+import com.gateway.gms.domain.interfaces.CloudMessagingServiceListener
 import com.gateway.gms.domain.models.MessagingTask
 import com.gateway.gms.domain.models.Resource
 import com.gateway.gms.domain.models.ServiceFailure
@@ -10,8 +11,9 @@ import com.huawei.hms.push.HmsMessageService
 import com.huawei.hms.push.HmsMessaging
 import com.huawei.hms.push.RemoteMessage
 
-open class HuaweiService : CloudMessaging, HmsMessageService() {
+class HuaweiService : CloudMessagingService, HmsMessageService() {
     private val messaging: HmsMessaging by lazy { GMServiceLocator.huaweiService }
+    override val listener: CloudMessagingServiceListener? by lazy { GMServiceLocator.listener }
 
     override fun subscribeToTopic(topic: String) =
         safeTaskCall { MessagingTask.Huawei(messaging.subscribe(topic)) }
@@ -31,10 +33,12 @@ open class HuaweiService : CloudMessaging, HmsMessageService() {
 
     override fun onMessageReceived(p0: RemoteMessage?) {
         super.onMessageReceived(p0)
+        listener?.onMessageReceived(message = p0)
     }
 
     override fun onNewToken(p0: String?) {
         super.onNewToken(p0)
+        listener?.onNewToken(token = p0.toString())
         with(GMServiceLocator.sharedPref.edit()) {
             putString(Constants.SharedPref.TOKEN, p0)
         }
