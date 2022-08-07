@@ -65,3 +65,52 @@ app/
     huawei-services.json
 ```
     
+
+```kotlin
+import com.gateway.gms.di.GMServiceLocator
+
+class MainActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        ...
+	
+	// initialize service 
+	
+	GMServiceLocator.initializeService(this.application)
+	
+	// Use Repository
+	
+	CoroutineScope(Dispatchers.IO).launch{
+            with(GMServiceLocator.cloudMessagingRepository) {
+                this.subscribeToTopic("Technology").collect {
+                    // Do Something
+                }
+            }
+        }
+    }
+}
+```
+
+
+> Also you can implement `CloudMessagingServiceListener`
+```kotlin
+
+```kotlin
+...
+import com.gateway.gms.domain.interfaces.CloudMessagingServiceListener
+
+class MainActivity : AppCompatActivity(), CloudMessagingServiceListener {
+	...
+    
+    override fun onMessageReceived(message: com.google.firebase.messaging.RemoteMessage) {
+        // Do Something
+    }
+
+    override fun onMessageReceived(message: com.huawei.hms.push.RemoteMessage?) {
+        // Do Something
+    }
+
+    override fun onNewToken(token: String) {
+        // Do Something
+    }
+}
+```
