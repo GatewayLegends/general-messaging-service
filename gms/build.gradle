@@ -51,8 +51,8 @@ dependencies {
 
     // Declare the dependencies for the Crashlytics and Analytics libraries
     // When using the BoM, you don't specify versions in Firebase library dependencies
-    implementation "com.google.firebase:firebase-messaging"
-    implementation "com.google.firebase:firebase-messaging-ktx"
+    api "com.google.firebase:firebase-messaging"
+    api "com.google.firebase:firebase-messaging-ktx"
 
-    implementation 'com.huawei.hms:push:6.1.0.300'
+    api 'com.huawei.hms:push:6.1.0.300'
 }
