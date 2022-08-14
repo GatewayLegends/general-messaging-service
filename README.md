@@ -92,7 +92,7 @@ class MainActivity : AppCompatActivity() {
 
 
 > Also you can implement `CloudMessagingServiceListener`
-```kotlin
+
 
 ```kotlin
 ...
