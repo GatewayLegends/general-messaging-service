@@ -27,6 +27,7 @@ dependencies {
 }
 ```
 
+Step 3. Add this to build.gradle in project-level:
 
 ```groovy
 buildscript {
@@ -44,13 +45,9 @@ buildscript {
 }
 ```
 
-Step 3. Create App on Firebase or Huawei & make package name like this:
-```json
-"com.gateway.gms"
-```
-
 ## Usage
-> **put this in app gradle**
+> **put this to build.gradle in app-level**
+
 ```groovy
 plugins {
     // Comment one who you needn't
