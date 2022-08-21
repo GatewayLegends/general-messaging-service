@@ -21,6 +21,11 @@ allprojects {
 
 Step 2. Add the dependency
 
+Step 3. Create App on Firebase or Huawei & make package name like this:
+```json
+"com.gateway.gms"
+```
+
 ```gradle
 dependencies {
 	        implementation 'com.github.sotware-supremacy:General-Messaging-Service:<VERSION>'
@@ -28,6 +33,15 @@ dependencies {
 ```
 
 ## Usage
+> **put this in app gradle**
+```groovy
+plugins {
+    // Comment one who you needn't
+    id 'com.huawei.agconnect'
+    id 'com.google.gms.google-services'
+}
+```
+
 > **put this in AndroidManifest.xml**
 ```xml
 <application>
