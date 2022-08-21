@@ -28,6 +28,22 @@ dependencies {
 ```
 
 
+```groovy
+buildscript {
+    ext {
+        ...
+        gms_service_version = '4.3.13'
+        hms_service_version = '1.6.0.300'
+    }
+    ...
+    dependencies {
+        ...
+        classpath "com.huawei.agconnect:agcp:$hms_service_version"
+        classpath "com.google.gms:google-services:$gms_service_version"
+    }
+}
+```
+
 Step 3. Create App on Firebase or Huawei & make package name like this:
 ```json
 "com.gateway.gms"
