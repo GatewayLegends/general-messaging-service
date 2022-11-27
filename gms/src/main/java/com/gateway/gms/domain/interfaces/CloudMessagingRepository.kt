@@ -6,6 +6,6 @@ import kotlinx.coroutines.flow.Flow
 interface CloudMessagingRepository {
     fun subscribeToTopic(topic: String): Flow<Resource<Void>>
     fun unsubscribeFromTopic(topic: String): Flow<Resource<Void>>
-    fun getToken(): Flow<Resource<String>>
+    val token: String?
     fun deleteToken(): Flow<Resource<Void>>
 }

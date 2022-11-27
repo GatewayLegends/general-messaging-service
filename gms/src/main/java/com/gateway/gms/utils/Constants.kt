@@ -1,9 +1,9 @@
 package com.gateway.gms.utils
 
 
-object Constants {
+internal object Constants {
     object SharedPref{
-        const val FILE_KEY = "GLS_PREF"
+        const val FILE_KEY = "GMS_PREF"
         const val TOKEN = "TOKEN"
     }
 }
