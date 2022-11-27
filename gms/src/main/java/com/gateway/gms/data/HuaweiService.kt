@@ -1,6 +1,6 @@
 package com.gateway.gms.data
 
-import com.gateway.gms.di.GMServiceLocator
+import android.content.SharedPreferences
 import com.gateway.gms.domain.interfaces.CloudMessagingService
 import com.gateway.gms.domain.interfaces.CloudMessagingServiceListener
 import com.gateway.gms.domain.models.MessagingTask
@@ -12,8 +12,9 @@ import com.huawei.hms.push.HmsMessaging
 import com.huawei.hms.push.RemoteMessage
 
 class HuaweiService : CloudMessagingService, HmsMessageService() {
-    private val messaging: HmsMessaging by lazy { GMServiceLocator.huaweiService }
-    override val listener: CloudMessagingServiceListener? by lazy { GMServiceLocator.listener }
+    lateinit var messaging: HmsMessaging
+    override var listener: CloudMessagingServiceListener? = null
+    var sharedPreferences: SharedPreferences? = null
 
     override fun subscribeToTopic(topic: String) =
         safeTaskCall { MessagingTask.Huawei(messaging.subscribe(topic)) }
@@ -21,12 +22,8 @@ class HuaweiService : CloudMessagingService, HmsMessageService() {
     override fun unsubscribeFromTopic(topic: String) =
         safeTaskCall { MessagingTask.Huawei(messaging.unsubscribe(topic)) }
 
-    override fun getToken(): Resource<String> {
-        GMServiceLocator.token?.let {
-            return@getToken Resource.Success(data = it)
-        }
-        return Resource.Fail(error = ServiceFailure.NoTokenError())
-    }
+    override fun getToken(): String? =
+        sharedPreferences?.getString(Constants.SharedPref.TOKEN, null)
 
     override fun deleteToken(): Resource<Void> =
         Resource.Fail(error = ServiceFailure.FeatureNotProvidedByService())
@@ -39,8 +36,8 @@ class HuaweiService : CloudMessagingService, HmsMessageService() {
     override fun onNewToken(p0: String?) {
         super.onNewToken(p0)
         listener?.onNewToken(token = p0.toString())
-        with(GMServiceLocator.sharedPref.edit()) {
-            putString(Constants.SharedPref.TOKEN, p0)
+        with(sharedPreferences?.edit()) {
+            this?.putString(Constants.SharedPref.TOKEN, p0)
         }
     }
 }

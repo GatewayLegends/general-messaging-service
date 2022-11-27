@@ -1,14 +1,12 @@
 package com.gateway.gms
 
 import android.app.Application
-import com.gateway.gms.di.GMServiceLocator
 import timber.log.Timber
 
 class GMSApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         timberConfig()
-        GMServiceLocator.initializeService(this)
     }
 
     private fun timberConfig(){

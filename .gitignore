@@ -67,3 +67,4 @@ fabric.properties
 /gms/google-services.json
 
 .idea/
+/app/google-services.json

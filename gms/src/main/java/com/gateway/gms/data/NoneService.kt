@@ -13,8 +13,7 @@ class NoneService : CloudMessagingService {
     override fun unsubscribeFromTopic(topic: String): Resource<Void> =
         Resource.Fail(error = ServiceFailure.ServiceNotDetected())
 
-    override fun getToken(): Resource<String> =
-        Resource.Fail(error = ServiceFailure.ServiceNotDetected())
+    override fun getToken(): String? = null
 
     override fun deleteToken(): Resource<Void> =
         Resource.Fail(error = ServiceFailure.ServiceNotDetected())

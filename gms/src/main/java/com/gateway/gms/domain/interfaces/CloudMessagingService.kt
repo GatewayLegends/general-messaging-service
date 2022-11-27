@@ -10,10 +10,10 @@ import com.huawei.hmf.tasks.Tasks as HuaweiTasks
 interface CloudMessagingService {
     fun subscribeToTopic(topic: String): Resource<Void>
     fun unsubscribeFromTopic(topic: String): Resource<Void>
-    fun getToken(): Resource<String>
+    fun getToken(): String?
     fun deleteToken(): Resource<Void>
 
-    val listener: CloudMessagingServiceListener?
+    var listener: CloudMessagingServiceListener?
 
     fun <T> safeTaskCall(block: () -> MessagingTask<T>) = catchTaskError(block())
 

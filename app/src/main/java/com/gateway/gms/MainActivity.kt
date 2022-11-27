@@ -2,7 +2,6 @@ package com.gateway.gms
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.gateway.gms.di.GMServiceLocator
 import com.gateway.gms.domain.interfaces.CloudMessagingServiceListener
 import com.google.firebase.messaging.RemoteMessage
 import kotlinx.coroutines.CoroutineScope
@@ -14,14 +13,15 @@ class MainActivity : AppCompatActivity(), CloudMessagingServiceListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        val gmsManager = GMSManager(this, this)
         CoroutineScope(Dispatchers.IO).launch{
-            with(GMServiceLocator.cloudMessagingRepository) {
+            with(gmsManager) {
                 this.subscribeToTopic("Technology").collect {
                     Timber.d(it.toString().substringAfter('$'))
                 }
             }
         }
-        Timber.d(GMServiceLocator.token)
+        Timber.d(gmsManager.token)
     }
 
     override fun onMessageReceived(message: RemoteMessage) {

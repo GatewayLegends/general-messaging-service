@@ -6,7 +6,7 @@ import com.gateway.gms.domain.models.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-class CloudMessagingRepositoryImpl(private val service: CloudMessagingService) :
+internal class CloudMessagingRepositoryImpl(private val service: CloudMessagingService) :
     CloudMessagingRepository {
     override fun subscribeToTopic(topic: String): Flow<Resource<Void>> =
         wrapWithFlow { service.subscribeToTopic(topic = topic) }
@@ -14,7 +14,7 @@ class CloudMessagingRepositoryImpl(private val service: CloudMessagingService) :
     override fun unsubscribeFromTopic(topic: String): Flow<Resource<Void>> =
         wrapWithFlow { service.unsubscribeFromTopic(topic = topic) }
 
-    override fun getToken(): Flow<Resource<String>> = wrapWithFlow(service::getToken)
+    override val token get(): String? = service.getToken()
 
     override fun deleteToken(): Flow<Resource<Void>> = wrapWithFlow(service::deleteToken)
 
