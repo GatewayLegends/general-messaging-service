@@ -13,8 +13,12 @@ import com.huawei.hms.push.RemoteMessage
 
 class HuaweiService : CloudMessagingService, HmsMessageService() {
     lateinit var messaging: HmsMessaging
-    override var listener: CloudMessagingServiceListener? = null
-    var sharedPreferences: SharedPreferences? = null
+
+    private val listener: CloudMessagingServiceListener?
+        get() = GMSConfigurations.listener
+
+    private val sharedPreferences: SharedPreferences?
+        get() = GMSConfigurations.sharedPreferences
 
     override fun subscribeToTopic(topic: String) =
         safeTaskCall { MessagingTask.Huawei(messaging.subscribe(topic)) }
@@ -36,8 +40,9 @@ class HuaweiService : CloudMessagingService, HmsMessageService() {
     override fun onNewToken(p0: String?) {
         super.onNewToken(p0)
         listener?.onNewToken(token = p0.toString())
-        with(sharedPreferences?.edit()) {
-            this?.putString(Constants.SharedPref.TOKEN, p0)
+        sharedPreferences?.edit()?.run {
+            putString(Constants.SharedPref.TOKEN, p0)
+            apply()
         }
     }
 }

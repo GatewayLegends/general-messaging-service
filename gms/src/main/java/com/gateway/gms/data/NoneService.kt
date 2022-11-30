@@ -1,8 +1,7 @@
 package com.gateway.gms.data
 
-import com.gateway.gms.domain.models.Resource
 import com.gateway.gms.domain.interfaces.CloudMessagingService
-import com.gateway.gms.domain.interfaces.CloudMessagingServiceListener
+import com.gateway.gms.domain.models.Resource
 import com.gateway.gms.domain.models.ServiceFailure
 
 
@@ -18,5 +17,4 @@ class NoneService : CloudMessagingService {
     override fun deleteToken(): Resource<Void> =
         Resource.Fail(error = ServiceFailure.ServiceNotDetected())
 
-    override var listener: CloudMessagingServiceListener? = null
 }

@@ -13,8 +13,6 @@ interface CloudMessagingService {
     fun getToken(): String?
     fun deleteToken(): Resource<Void>
 
-    var listener: CloudMessagingServiceListener?
-
     fun <T> safeTaskCall(block: () -> MessagingTask<T>) = catchTaskError(block())
 
     private fun <T> catchTaskError(block: MessagingTask<T>) =

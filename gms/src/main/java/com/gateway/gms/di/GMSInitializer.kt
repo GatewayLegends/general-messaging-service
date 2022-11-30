@@ -9,19 +9,22 @@ import com.google.android.gms.common.ConnectionResult
 import com.google.firebase.FirebaseApp
 import timber.log.Timber
 
-internal class GMSInitializer(private val context: Context, private val listener: CloudMessagingServiceListener? = null) {
+internal class GMSInitializer(
+    context: Context,
+    listener: CloudMessagingServiceListener? = null
+) {
     var serviceProvider: Services = Services.None
     var isServicesAvailable: Boolean = false
     private var module: GMSModule
     val repository: CloudMessagingRepository
 
     init {
-        module = GMSModule(context = context)
-        prepareAvailability(module = module)
-        repository = provideCloudMessagingRepository(module)
+        module = GMSModule(context = context, listener = listener)
+        prepareAvailability(module = module, context = context)
+        repository = provideCloudMessagingRepository(module = module)
     }
 
-    private fun prepareAvailability(module: GMSModule) {
+    private fun prepareAvailability(module: GMSModule, context: Context) {
         isServicesAvailable = with(module) {
             when (ConnectionResult.SUCCESS) {
                 googleApiAvailability.isGooglePlayServicesAvailable(context) -> {
@@ -48,13 +51,9 @@ internal class GMSInitializer(private val context: Context, private val listener
             service = when (serviceProvider) {
                 is Services.Google -> GoogleService().apply {
                     messaging = module.googleService
-                    listener = this@GMSInitializer.listener
-                    sharedPreferences = module.sharedPreferences
-                }
+                    }
                 is Services.Huawei -> HuaweiService().apply {
                     messaging = module.huaweiService
-                    listener = this@GMSInitializer.listener
-                    sharedPreferences = module.sharedPreferences
                 }
                 else -> NoneService()
             }
