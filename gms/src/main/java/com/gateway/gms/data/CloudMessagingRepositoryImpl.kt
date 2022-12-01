@@ -6,8 +6,9 @@ import com.gateway.gms.domain.models.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-internal class CloudMessagingRepositoryImpl(private val service: CloudMessagingService) :
+internal class CloudMessagingRepositoryImpl(val service: CloudMessagingService) :
     CloudMessagingRepository {
+
     override fun subscribeToTopic(topic: String): Flow<Resource<Void>> =
         wrapWithFlow { service.subscribeToTopic(topic = topic) }
 
